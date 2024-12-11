@@ -1,16 +1,16 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate} from 'react-router-dom';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-
+  const navigate = useNavigate();
   return (
     <footer className="bg-gray-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
-            <h3 className="text-lg font-bold">WorkNear</h3>
+            <h3 className="text-lg font-bold cursor-pointer" onClick={()=>navigate("/")}>WorkNear</h3>
             <p className="text-gray-400">
               Making the world a better place through innovative solutions.
             </p>
@@ -23,7 +23,6 @@ const Footer = () => {
               <li><Link to="/" className="text-gray-400 hover:text-white">Home</Link></li>
               <li><Link to="/about" className="text-gray-400 hover:text-white">About</Link></li>
               <li><Link to="/contact" className="text-gray-400 hover:text-white">Contact</Link></li>
-              <li><Link to="/jobs" className="text-gray-400 hover:text-white">Careers</Link></li>
             </ul>
           </div>
 
@@ -59,10 +58,10 @@ const Footer = () => {
 
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 py-6 text-center md:flex md:justify-between text-gray-400 text-sm">
-          <p>© {currentYear} CompanyName. All rights reserved.</p>
+          <p>© {currentYear} WorkNear. All rights reserved.</p>
           <div className="mt-4 md:mt-0 space-x-4">
-            <a href="/privacy" className="hover:text-white">Privacy Policy</a>
-            <a href="/terms" className="hover:text-white">Terms of Service</a>
+            <Link to="/" className="hover:text-white">Privacy Policy</Link>
+            <Link to="/" className="hover:text-white">Terms of Service</Link>
           </div>
         </div>
       </div>

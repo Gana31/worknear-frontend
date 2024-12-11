@@ -21,13 +21,12 @@ const Navbar = () => {
 
   const handleLogout = () => {
     // dispatch(logoutUser());
-    // setIsProfileMenuOpen(false);
+    setIsProfileMenuOpen(false);
   };
 
   const navLinks = [
     { name: "Home", path: "/" },
-    { name: "Products", path: "/products" },
-    { name: "Services", path: "/services" },
+    { name: "Job", path: "/job" },
     { name: "About", path: "/about" },
     { name: "Contact", path: "/contact" },
   ];
@@ -44,7 +43,7 @@ const Navbar = () => {
         <div className="flex justify-between h-16">
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center">
-            <span className="text-xl font-bold text-gray-800">WorkNear</span>
+            <span className="text-xl font-bold text-gray-800 cursor-pointer" onClick={()=>navigate("/")}>WorkNear</span>
           </div>
 
           {/* Desktop Navigation */}

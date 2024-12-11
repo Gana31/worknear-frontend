@@ -61,6 +61,7 @@ const Login = () => {
         const validationErrors = validate();
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
+            dispatch(setLoading(false));
             return;
         }
         isSignUp
@@ -94,7 +95,8 @@ const Login = () => {
     };
 
     return (
-        <div className="h-[100vh] w-[100vw] flex justify-center items-center dark:bg-white">
+        <div className={`${isSignUp ? "h-[130vh]" : "h-[80vh]"
+                    } w-screen flex justify-center dark:bg-white`}>
             <div
                 className={`grid transition-all duration-500 ${isSignUp ? "h-[100vh]" : "h-[60vh]"
                     }`}

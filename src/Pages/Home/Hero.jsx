@@ -20,7 +20,7 @@ const Hero = () => {
                 <input
                   type="text"
                   placeholder="Job title or keyword"
-                  className="w-full outline-none"
+                  className="w-full bg-transparent outline-none"
                 />
               </div>
               <div className="flex items-center border rounded-md p-2">
@@ -28,7 +28,7 @@ const Hero = () => {
                 <input
                   type="text"
                   placeholder="Location"
-                  className="w-full outline-none"
+                  className="w-full bg-transparent outline-none"
                 />
               </div>
               <button className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg w-full hover:scale-105 hover:from-purple-500 hover:to-blue-500 transition duration-300 ease-in-out shadow-lg">

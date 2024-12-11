@@ -4,6 +4,8 @@ import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import Home from "./Pages/Home/Home";
 import Footer from "./Component/Common/Footer";
 import Navbar from "./Component/Common/Navbar/Navbar";
+import AboutPage from "./Pages/AboutUs/Aboutus";
+import ContactPage from "./Pages/Contactus/ContactUs";
 
 
 
@@ -23,12 +25,12 @@ function App() {
           element={accessToken ? <Navigate to="/" /> : <Login />} 
         />
         <Route path="/" element={<Home />} />
-        {/* <Route path="/productlist" element={<ProductList />} />
-        <Route path="/productlist/productPage/:product" element={<ProductDetailPage />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/about" element={<About />} /> */}
+        {/* <Route path="/productlist" element={<ProductList />} /> */}
+        {/* <Route path="/productlist/productPage/:product" element={<ProductDetailPage />} /> */}
+        <Route path="/contact" element={<ContactPage />} />
+        {/* <Route path="/profile" element={<Profile />} /> */}
+        {/* <Route path="/cart" element={<Cart />} /> */}
+        <Route path="/about" element={<AboutPage />} />
 
         {/* Protected Routes
         <Route 
