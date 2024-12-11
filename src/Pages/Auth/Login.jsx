@@ -73,7 +73,7 @@ const Login = () => {
                         password: formValue.password,
                         account_type: formValue.accountType,
                     },
-                    navigate
+                    navigate,setIsSignUp
                 )
             )
             : dispatch(

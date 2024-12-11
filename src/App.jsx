@@ -6,6 +6,8 @@ import Footer from "./Component/Common/Footer";
 import Navbar from "./Component/Common/Navbar/Navbar";
 import AboutPage from "./Pages/AboutUs/Aboutus";
 import ContactPage from "./Pages/Contactus/ContactUs";
+import ProfilePage from "./Pages/Profile/Profile";
+import NotFound from "./Component/NotFound";
 
 
 
@@ -28,10 +30,10 @@ function App() {
         {/* <Route path="/productlist" element={<ProductList />} /> */}
         {/* <Route path="/productlist/productPage/:product" element={<ProductDetailPage />} /> */}
         <Route path="/contact" element={<ContactPage />} />
-        {/* <Route path="/profile" element={<Profile />} /> */}
+        <Route path="/profile" element={<ProfilePage />} />
         {/* <Route path="/cart" element={<Cart />} /> */}
         <Route path="/about" element={<AboutPage />} />
-
+        <Route path="*" element={<NotFound />} />
         {/* Protected Routes
         <Route 
           path="/userorders" 

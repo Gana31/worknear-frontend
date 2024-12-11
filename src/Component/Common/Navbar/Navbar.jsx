@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaUser, FaCog, FaSignOutAlt, FaBars, FaTimes, FaBell } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../../../Services/Operations/authoperation";
 // import { logoutUser } from "../../Slices/authSlice"; // Assuming you have a logout action
 
 const Navbar = () => {
@@ -17,11 +18,14 @@ const Navbar = () => {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const toggleProfileMenu = () => setIsProfileMenuOpen(!isProfileMenuOpen);
 
-  const handleLoginRedirect = () => navigate("/login");
+  const handleLoginRedirect = () => {navigate("/login"),
+    setIsProfileMenuOpen(!isProfileMenuOpen)
+  };
 
   const handleLogout = () => {
-    // dispatch(logoutUser());
+    dispatch(logout(navigate));
     setIsProfileMenuOpen(false);
+    setIsMenuOpen(!isMenuOpen)
   };
 
   const navLinks = [
@@ -32,8 +36,16 @@ const Navbar = () => {
   ];
 
   const profileMenuItems = [
-    { icon: FaUser, label: "Profile", action: () => console.log("Profile clicked") },
-    { icon: FaCog, label: "Settings", action: () => console.log("Settings clicked") },
+    { icon: FaUser, label: "Profile", 
+      action: () => {
+        setIsMenuOpen(!isMenuOpen)
+        navigate("/profile");
+    } },
+    { icon: FaCog, label: "Settings", 
+      action: () => {
+        setIsMenuOpen(!isMenuOpen)
+        console.log("Settings clicked")
+      } },
     { icon: FaSignOutAlt, label: "Logout", action: handleLogout },
   ];
 
@@ -58,6 +70,11 @@ const Navbar = () => {
               </Link>
             ))}
           </div>
+          <div className="md:hidden flex items-center space-x-2">
+          <button className="text-gray-600 hover:text-gray-800">
+              <FaBell className="h-5 w-5" />
+            </button>
+          </div>
 
           {/* Notification & Profile Menu */}
           <div className="hidden md:flex items-center space-x-8">
@@ -67,7 +84,8 @@ const Navbar = () => {
             {!isLoggedIn ? (
               <button
                 onClick={handleLoginRedirect}
-                className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg shadow-lg hover:scale-105 hover:from-purple-500 hover:to-blue-500 transition duration-300 ease-in-out"
+                className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white 
+                rounded-lg shadow-lg hover:scale-105 hover:from-purple-500 hover:to-blue-500 transition duration-300 ease-in-out"
               >
                 Login
               </button>
@@ -120,6 +138,7 @@ const Navbar = () => {
             <Link
               key={link.name}
               to={link.path}
+              onClick={()=>setIsMenuOpen(!isMenuOpen)}
               className="block text-gray-600 hover:text-gray-800 px-3 py-2 rounded-md text-base font-medium"
             >
               {link.name}
@@ -136,7 +155,8 @@ const Navbar = () => {
             ) : (
               profileMenuItems.map((item) => (
                 <button
-                  key={item.label}
+                key={item.label}
+
                   onClick={item.action}
                   className="w-full flex items-center px-3 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-md"
                 >
