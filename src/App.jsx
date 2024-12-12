@@ -32,7 +32,7 @@ function App() {
         {/* <Route path="/productlist" element={<ProductList />} /> */}
         {/* <Route path="/productlist/productPage/:product" element={<ProductDetailPage />} /> */}
         <Route path="/contact" element={<ContactPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
+        
         {/* <Route path="/cart" element={<Cart />} /> */}
         <Route path="/about" element={<AboutPage />} />
         <Route path="*" element={<NotFound />} />
@@ -49,6 +49,7 @@ function App() {
           path="/list-product"  
           element={<ProtectedRoute element={<Layout><ListProduct /></Layout>} />} 
         /> */}
+        <Route path="/profile" element={<ProtectedRoute element={<ProfilePage />}/>} />
         <Route 
           path="/manage-category"  
           element={<ProtectedRoute element={<Category />} />} 
