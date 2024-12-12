@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaUser, FaCog, FaSignOutAlt, FaBars, FaTimes, FaBell } from "react-icons/fa";
+import { FaUser, FaCog, FaSignOutAlt, FaBars, FaTimes, FaBell} from "react-icons/fa";
+import { TbCategoryPlus } from "react-icons/tb";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../../Services/Operations/authoperation";
 // import { logoutUser } from "../../Slices/authSlice"; // Assuming you have a logout action
@@ -38,14 +39,22 @@ const Navbar = () => {
   const profileMenuItems = [
     { icon: FaUser, label: "Profile", 
       action: () => {
-        setIsMenuOpen(!isMenuOpen)
+        setIsMenuOpen(false)
+        setIsProfileMenuOpen(!isProfileMenuOpen)
         navigate("/profile");
     } },
     { icon: FaCog, label: "Settings", 
       action: () => {
-        setIsMenuOpen(!isMenuOpen)
+        setIsMenuOpen(false)
+        setIsProfileMenuOpen(!isProfileMenuOpen)
         console.log("Settings clicked")
       } },
+      { icon: TbCategoryPlus, label: "Add Category", 
+        action: () => {
+          setIsMenuOpen(false)
+          setIsProfileMenuOpen(!isProfileMenuOpen)
+          navigate("/manage-category");
+        } },
     { icon: FaSignOutAlt, label: "Logout", action: handleLogout },
   ];
 
@@ -144,11 +153,12 @@ const Navbar = () => {
               {link.name}
             </Link>
           ))}
-          <div className="pt-4 space-y-2">
+          <div className="pt-4 w-[70%] items-center space-y-2 mr-5">
             {!isLoggedIn ? (
               <button
                 onClick={handleLoginRedirect}
-                className="bg-blue-600 text-white px-4 py-2 rounded-md w-full hover:bg-blue-700"
+                className=" px-4 py-2 w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white 
+                rounded-lg shadow-lg hover:scale-105 hover:from-purple-500 hover:to-blue-500 transition duration-300 ease-in-out"
               >
                 Login
               </button>

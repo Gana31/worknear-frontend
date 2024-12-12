@@ -8,6 +8,8 @@ import AboutPage from "./Pages/AboutUs/Aboutus";
 import ContactPage from "./Pages/Contactus/ContactUs";
 import ProfilePage from "./Pages/Profile/Profile";
 import NotFound from "./Component/NotFound";
+import ProtectedRoute from "./Component/Common/ProtectedRoutes";
+import Category from "./Pages/Category/Category";
 
 
 
@@ -34,8 +36,8 @@ function App() {
         {/* <Route path="/cart" element={<Cart />} /> */}
         <Route path="/about" element={<AboutPage />} />
         <Route path="*" element={<NotFound />} />
-        {/* Protected Routes
-        <Route 
+        Protected Routes
+        {/* <Route 
           path="/userorders" 
           element={<ProtectedRoute element={<OrderHistory />} />} 
         />
@@ -46,11 +48,11 @@ function App() {
         <Route 
           path="/list-product"  
           element={<ProtectedRoute element={<Layout><ListProduct /></Layout>} />} 
-        />
+        /> */}
         <Route 
           path="/manage-category"  
-          element={<ProtectedRoute element={<Layout><ManageCategories /></Layout>} />} 
-        /> */}
+          element={<ProtectedRoute element={<Category />} />} 
+        />
       </Routes>
       <Footer/>
     </div>
