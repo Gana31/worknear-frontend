@@ -1,26 +1,30 @@
-import React, { useState } from "react";
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { IoLayersSharp } from "react-icons/io5";
-import { addServiceToCategory, createCategory, deleteCategory, deleteService } from "./categoryUtils";
+
 import CategoryForm from "./CategoryForm";
 import CategoryList from "./CategoryList";
+import { addCategory, addService, deleteCategory, deleteService } from "../../Slices/categorySlice";
+
 
 function Category() {
-  const [categories, setCategories] = useState([]);
+  const dispatch = useDispatch();
+  const categories = useSelector((state) => state.categories);
 
   const handleAddCategory = (newCategory) => {
-    setCategories([...categories, createCategory(newCategory.name)]);
+    dispatch(addCategory({ name: newCategory.name }));
   };
 
   const handleAddService = (categoryId, newService) => {
-    setCategories(addServiceToCategory(categories, categoryId, newService));
+    dispatch(addService({ categoryId, service: newService }));
   };
 
   const handleDeleteCategory = (categoryId) => {
-    setCategories(deleteCategory(categories, categoryId));
+    dispatch(deleteCategory(categoryId));
   };
 
   const handleDeleteService = (categoryId, serviceId) => {
-    setCategories(deleteService(categories, categoryId, serviceId));
+    dispatch(deleteService({ categoryId, serviceId }));
   };
 
   return (
@@ -28,7 +32,7 @@ function Category() {
       {/* Background Image */}
       <div className="relative h-48 md:h-64 lg:h-80">
         <img
-          src={"https://images.unsplash.com/photo-1579546929518-9e396f3cc809?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"}
+          src="https://images.unsplash.com/photo-1579546929518-9e396f3cc809?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
           alt="Background"
           className="w-full h-full object-cover"
         />
