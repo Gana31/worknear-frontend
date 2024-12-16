@@ -4,7 +4,9 @@ import { FaUser, FaCog, FaSignOutAlt, FaBars, FaTimes, FaBell} from "react-icons
 import { TbCategoryPlus } from "react-icons/tb";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../../Services/Operations/authoperation";
+import { SiApostrophe } from "react-icons/si";
 // import { logoutUser } from "../../Slices/authSlice"; // Assuming you have a logout action
+import { MdOutlineManageHistory } from "react-icons/md";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -55,6 +57,18 @@ const Navbar = () => {
           setIsProfileMenuOpen(!isProfileMenuOpen)
           navigate("/manage-category");
         } },
+        { icon: SiApostrophe, label: "Create Post", 
+          action: () => {
+            setIsMenuOpen(false)
+            setIsProfileMenuOpen(!isProfileMenuOpen)
+            navigate("/create-post");
+          } },
+          { icon: MdOutlineManageHistory, label: "Old Post", 
+            action: () => {
+              setIsMenuOpen(false)
+              setIsProfileMenuOpen(!isProfileMenuOpen)
+              navigate("/old-post");
+            } },
     { icon: FaSignOutAlt, label: "Logout", action: handleLogout },
   ];
 

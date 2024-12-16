@@ -10,6 +10,10 @@ import ProfilePage from "./Pages/Profile/Profile";
 import NotFound from "./Component/NotFound";
 import ProtectedRoute from "./Component/Common/ProtectedRoutes";
 import Category from "./Pages/Category/Category";
+import JobMain from "./Pages/Job/JobMain";
+import JobPostForm from "./Pages/Post/CreatePost";
+import PreviousMainPage from "./Pages/Post/PreviousPost/PreviousMainPage";
+import CompanyProfilePage from "./Pages/Profile/CompanyProfile";
 
 
 
@@ -35,7 +39,12 @@ function App() {
         
         {/* <Route path="/cart" element={<Cart />} /> */}
         <Route path="/about" element={<AboutPage />} />
+        <Route path="/job" element={<JobMain/>} />
+        <Route path="/create-post" element={<JobPostForm/>} />
         <Route path="*" element={<NotFound />} />
+        <Route path="/old-post" element={<PreviousMainPage/>} />
+        <Route path="/cprofile" element={<CompanyProfilePage/>} />
+        
         Protected Routes
         {/* <Route 
           path="/userorders" 
