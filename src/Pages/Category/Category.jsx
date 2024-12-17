@@ -1,31 +1,45 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { IoLayersSharp } from "react-icons/io5";
 
 import CategoryForm from "./CategoryForm";
 import CategoryList from "./CategoryList";
-import { addCategory, addService, deleteCategory, deleteService } from "../../Slices/categorySlice";
-
+import { addNewCategory, fetchCategories, removeCategory, updateCategory } from "../../Services/Operations/categoryoperation";
+import LoadingSpinner from "../../Component/Common/Spinner";
 
 function Category() {
   const dispatch = useDispatch();
-  const categories = useSelector((state) => state.categories);
+  const categories = useSelector((state) => state.categories.categories);
+  const loading = useSelector((state) => state.categories.loading);
+  const user = useSelector((state) => state.auth.user); 
+  const [editingCategory, setEditingCategory] = useState(null);
+
+  useEffect(() => {
+    if (user) {
+      dispatch(fetchCategories(user.id)); // Fetch categories when the page loads
+    }
+  }, [dispatch, user]);
 
   const handleAddCategory = (newCategory) => {
-    dispatch(addCategory({ name: newCategory.name }));
+    dispatch(addNewCategory(newCategory));
   };
 
-  const handleAddService = (categoryId, newService) => {
-    dispatch(addService({ categoryId, service: newService }));
+  const handleEditCategory = (categoryId, newName) => {
+    dispatch(updateCategory(categoryId, newName));
+    setEditingCategory(null); // Close editing mode after save
   };
 
   const handleDeleteCategory = (categoryId) => {
-    dispatch(deleteCategory(categoryId));
+    dispatch(removeCategory(categoryId)); // Only deletes the selected category
   };
 
-  const handleDeleteService = (categoryId, serviceId) => {
-    dispatch(deleteService({ categoryId, serviceId }));
+  const handleEditCategoryClick = (category) => {
+    setEditingCategory(category);
   };
+
+  if (loading) {
+    return <div><LoadingSpinner/></div>; // Loading indicator
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -47,7 +61,11 @@ function Category() {
           </div>
 
           {/* Category Form */}
-          <CategoryForm onAddCategory={handleAddCategory} />
+          <CategoryForm
+            onAddCategory={handleAddCategory}
+            onEditCategory={handleEditCategory}
+            editingCategory={editingCategory}
+          />
 
           {/* Category List or Placeholder */}
           {categories.length === 0 ? (
@@ -58,9 +76,8 @@ function Category() {
           ) : (
             <CategoryList
               categories={categories}
-              onAddService={handleAddService}
               onDeleteCategory={handleDeleteCategory}
-              onDeleteService={handleDeleteService}
+              onEditCategory={handleEditCategoryClick}
             />
           )}
         </div>

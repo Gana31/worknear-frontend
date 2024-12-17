@@ -2,20 +2,24 @@ import React, { useState } from "react";
 import { FaBriefcase, FaCode, FaFileImage, FaClock, FaGlobe, FaTag, FaBuilding } from "react-icons/fa";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { useSelector } from "react-redux";
 
 function JobPostForm() {
     const coverPhoto =
         "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80";
-    const companyName = "TechCorp"; // Replace with dynamic data if needed
-
+    const {user} = useSelector((state)=>state.auth);
     const [mode, setMode] = useState("traditional"); // 'traditional' or 'visual'
     const [formData, setFormData] = useState({
-        title: "",
+        name: user.name || "",
+        title : "",
+        profilePicture : user.avatar || "",
         description: "",
         jobType: "Full-Time", // Full-Time, Part-Time, Contract
         jobMode: "Onsite", // Onsite, Remote, Hybrid
         skills: "",
         location: "",
+        city:"",
+        mobile:"",
         salary: "",
         tags: "",
         postMode: "Draft",
@@ -70,10 +74,15 @@ function JobPostForm() {
                 <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-6">
                     {/* Company Icon and Name */}
                     <div className="flex items-center mb-6 space-x-4">
-                        <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white">
-                            <FaBuilding size={24} />
+                        <div >
+                        <img
+                        src={formData.profilePicture}
+                         alt={formData.name}
+                         className="w-32 h-32 rounded-full border-4 border-white shadow-lg mx-auto md:mx-0 cursor-pointer"
+    
+                />
                         </div>
-                        <h2 className="text-xl font-bold text-gray-800">{companyName}</h2>
+                        <h2 className="text-xl font-bold text-gray-800">{formData.name}</h2>
                     </div>
 
                     {/* Job Post Form */}
@@ -167,7 +176,18 @@ function JobPostForm() {
                                             </select>
                                         </div>
                                     </div>
-
+                                    <div className="mb-4">
+                                        <label className="block text-sm font-semibold mb-2">Mobile Number</label>
+                                        <input
+                                            type="number"
+                                            name="mobile"
+                                            maxLength={"10"}
+                                            value={formData.mobile}
+                                            onChange={handleInputChange}
+                                            placeholder="e.g., 123456789"
+                                            className="w-full p-2 border rounded-lg"
+                                        />
+                                    </div>
                                     <div className="mb-4">
                                         <label className="block text-sm font-semibold mb-2">Skills Required</label>
                                         <input
@@ -191,7 +211,18 @@ function JobPostForm() {
                                             className="w-full p-2 border rounded-lg"
                                         />
                                     </div>
-
+                                    <div className="mb-4">
+                                        <label className="block text-sm font-semibold mb-2">City</label>
+                                        <input
+                                            type="text"
+                                            name="city"
+                                            maxLength={"10"}
+                                            value={formData.city}
+                                            onChange={handleInputChange}
+                                            placeholder="e.g., Mumbai"
+                                            className="w-full p-2 border rounded-lg"
+                                        />
+                                    </div>
                                     <div className="mb-4">
                                         <label className="block text-sm font-semibold mb-2">Salary Range</label>
                                         <input

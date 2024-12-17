@@ -1,49 +1,49 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { toast } from "react-toastify";
+import { createSlice } from '@reduxjs/toolkit';
+
+const initialState = {
+  categories: [],
+  loading: false,
+  error: null,
+};
 
 const categorySlice = createSlice({
-  name: "categories",
-  initialState: [],
+  name: 'categories',
+  initialState,
   reducers: {
-    addCategory: (state, action) => {
-      const newCategory = {
-        id: Date.now(),
-        name: action.payload.name,
-        services: [],
-      };
-      toast.success("Category added successfully!");
-      state.push(newCategory);
+    setCategories: (state, action) => {
+      state.categories = action.payload;
     },
-    addService: (state, action) => {
-      const { categoryId, service } = action.payload;
-      const category = state.find((cat) => cat.id === categoryId);
-      if (category) {
-        category.services.push({
-          id: Date.now(),
-          name: service.name,
-          description: service.description,
-        });
-        toast.success("Service added successfully!");
-      } else {
-        toast.error("Category not found!");
-      }
+    setLoading: (state, action) => {
+      state.loading = action.payload;
+    },
+    setError: (state, action) => {
+      state.error = action.payload;
+    },
+    addCategory: (state, action) => {
+      state.categories.push(action.payload);
     },
     deleteCategory: (state, action) => {
-      const categoryId = action.payload;
-      return state.filter((category) => category.id !== categoryId);
+      state.categories = state.categories.filter(
+        (category) => category.id !== action.payload
+      );
     },
-    deleteService: (state, action) => {
-      const { categoryId, serviceId } = action.payload;
-      const category = state.find((cat) => cat.id === categoryId);
+    editCategory: (state, action) => {
+      const { categoryId, newName } = action.payload;
+      const category = state.categories.find((cat) => cat.id === categoryId);
       if (category) {
-        category.services = category.services.filter((svc) => svc.id !== serviceId);
-        toast.success("Service removed successfully!");
-      } else {
-        toast.error("Category not found!");
+        category.name = newName;
       }
     },
   },
 });
 
-export const { addCategory, addService, deleteCategory, deleteService } = categorySlice.actions;
+export const {
+  setCategories,
+  setLoading,
+  setError,
+  addCategory,
+  deleteCategory,
+  editCategory,
+} = categorySlice.actions;
+
 export default categorySlice.reducer;

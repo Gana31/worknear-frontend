@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { FaEdit, FaMapMarkerAlt, FaLink, FaUsers, FaBriefcase, FaClock, FaCertificate, FaCode, FaSave, FaTimes, FaGithub, FaLinkedin, FaTwitter, FaCalendarAlt, FaTrash, FaPlus } from "react-icons/fa";
+import { FaEdit, FaMapMarkerAlt, FaLink, FaUsers, FaBriefcase, FaClock, FaCertificate, FaCode, FaSave, FaTimes, FaGithub, 
+  FaLinkedin, FaTwitter, FaCalendarAlt, FaTrash, FaPlus, FaTag, FaCheck,FaCity } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import EditableField from "./EditableInput";
 import SocialLink from "./SocialInput";
@@ -16,7 +17,8 @@ function ProfilePage() {
     location: "San Francisco, CA",
     website: "www.sarahanderson.dev",
     joinDate: "January 2024",
-    expertise: "React, JavaScript, Next.js, Tailwind CSS",
+    city:"aurangabad",
+    categories: ["React", "JavaScript"], 
     services: "Frontend Development, UI/UX Design, Performance Optimization",
     availability: "Open to opportunities",
     experience: "8+ years",
@@ -32,7 +34,19 @@ function ProfilePage() {
     },
   });
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
+  const allCategories = [
+    "React",
+    "JavaScript",
+    "Node.js",
+    "Python",
+    "Django",
+    "Flutter",
+    "UI/UX Design",
+    "Next.js",
+    "SQL",
+    "MongoDB",
+    "AWS",
+  ];
   const img_urls = [
     "https://res.cloudinary.com/dnyhn7loo/image/upload/v1732534321/profile_images/g1xzno2gegyixplrqky2.webp",
     "https://res.cloudinary.com/dnyhn7loo/image/upload/v1732534320/profile_images/xyrs8o9vgo8qjhz1dlaw.webp",
@@ -48,6 +62,17 @@ function ProfilePage() {
       [name]: value,
     }));
   };
+  const toggleCategory = (category) => {
+    setProfileData((prev) => {
+      const isSelected = prev.categories.includes(category);
+      return {
+        ...prev,
+        categories: isSelected
+          ? prev.categories.filter((c) => c !== category) // Deselect
+          : [...prev.categories, category], // Select
+      };
+    });
+  };
 
   const handleSocialChange = (e) => {
     const { name, value } = e.target;
@@ -59,6 +84,36 @@ function ProfilePage() {
       },
     }));
   };
+  const handleSave = () => {
+    // Prepare the data to be saved
+    const profileDataToSave = { ...profileData };
+  
+    // Filter out null or empty values
+    for (const key in profileDataToSave) {
+      if (profileDataToSave[key] === null || profileDataToSave[key] === "") {
+        delete profileDataToSave[key];
+      }
+    }
+  
+    // Make the API call to save the data
+    saveProfileDataToAPI(profileDataToSave);
+    setIsEditing(false); // Exit editing mode after saving
+  };
+  
+  const saveProfileDataToAPI = async (data) => {
+    try {
+      const response = await apiClient.put("/update-profile", data);
+      if (response.data.success) {
+        toast.success("Profile updated successfully");
+        dispatch(updateUser(response.data.user)); // Update Redux store
+      } else {
+        toast.error("Failed to update profile");
+      }
+    } catch (error) {
+      toast.error("Error updating profile");
+    }
+  };
+  
 
   const handleEducationChange = (e, index) => {
     const { name, value } = e.target;
@@ -92,11 +147,11 @@ function ProfilePage() {
     { label: "Bio", name: "bio", icon: FaUsers, multiline: true },
     { label: "Location", name: "location", icon: FaMapMarkerAlt },
     { label: "Website", name: "website", icon: FaLink },
-    { label: "Expertise", name: "expertise", icon: FaCode },
-    { label: "Services", name: "services", icon: FaBriefcase },
-    { label: "Availability", name: "availability", icon: FaClock },
     { label: "Experience", name: "experience", icon: FaBriefcase },
     { label: "Certifications", name: "certifications", icon: FaCertificate },
+    { label: "Services", name: "services", icon: FaBriefcase },
+    { label: "City", name: "city", icon: FaCity },
+    
   ];
 
   const socialLinks = [
@@ -151,6 +206,7 @@ function ProfilePage() {
                     <input
                       type="text"
                       name="name"
+                      placeholder="Enter Your Name"
                       value={profileData.name}
                       onChange={handleInputChange}
                       className="text-2xl font-bold w-full border rounded-md p-2"
@@ -159,6 +215,7 @@ function ProfilePage() {
                       type="text"
                       name="role"
                       value={profileData.role}
+                         placeholder="Enter Your Role"
                       onChange={handleInputChange}
                       className="text-gray-600 w-full border rounded-md p-2"
                     />
@@ -188,6 +245,15 @@ function ProfilePage() {
                 </>
               )}
             </button>
+            {isEditing && (
+                <button
+                  onClick={handleSave}
+                  className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-green-50 text-green-600 hover:bg-green-100 transition-colors"
+                >
+                  <FaSave className="w-4 h-4" />
+                  <span>Save</span>
+                </button>
+              )}
           </div>
 
           <div className="space-y-1 divide-y mt-5">
@@ -204,7 +270,72 @@ function ProfilePage() {
               />
             ))}
           </div>
+          <div className="flex items-center gap-4 mt-4 group relative p-3 rounded-lg hover:bg-gray-50 transition-colors">
+            <FaClock className="text-gray-500 w-5 h-5" />
+            <div className="w-full">
+              <label className="text-gray-500 font-semibold">Availability</label>
+              {isEditing ? (
+                <select
+                  name="availability"
+                  value={profileData.availability}
+                  onChange={handleInputChange}
+                  className="w-full mt-1 p-2 border text-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="Open to opportunities">Open to opportunities</option>
+                  <option value="Available for freelance">Available for freelance</option>
+                  <option value="Currently unavailable">Currently unavailable</option>
+                  <option value="Looking for full-time">Looking for full-time</option>
+                </select>
+              ) : (
+                <p className="text-gray-600 mt-1">{profileData.availability}</p>
+              )}
+            </div>
+          </div>
 
+            {/* Categories Section */}
+            <div className="mt-6">
+            <h3 className="text-lg font-semibold flex items-center gap-2">
+              <FaTag className="text-gray-500" /><span className="text-gray-500"> Categories</span>
+            </h3>
+            {isEditing ? (
+              <div className="relative mt-2">
+                <button
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  className="px-3 py-2 border rounded-md w-full text-left"
+                >
+                  Select Categories
+                </button>
+                {isDropdownOpen && (
+                  <div className="absolute z-10 mt-2 bg-white border rounded-md shadow-lg w-full">
+                    {allCategories.map((category) => (
+                      <div
+                        key={category}
+                        className="p-2 hover:bg-gray-100 cursor-pointer flex justify-between"
+                        onClick={() => toggleCategory(category)}
+                      >
+                        <span>{category}</span>
+                        {profileData.categories.includes(category) && (
+                          <FaCheck className="text-green-500" />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="flex flex-wrap gap-2 mt-2">
+                {profileData.categories.map((category) => (
+                  <span
+                    key={category}
+                    className="px-3 py-1 bg-blue-100 text-blue-700 rounded-md text-sm flex items-center gap-1"
+                  >
+                    {category}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+   
           {/* Education Section */}
           <div className="mt-6  rounded-lg p-4">
             <h3 className="text-lg font-semibold mb-4">Education</h3>

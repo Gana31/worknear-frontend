@@ -1,17 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IoAdd } from 'react-icons/io5';
 
-const CategoryForm = ({ onAddCategory }) => {
+const CategoryForm = ({ onAddCategory, onEditCategory, editingCategory }) => {
   const [categoryName, setCategoryName] = useState('');
+
+  // Set the input field when editing a category
+  useEffect(() => {
+    if (editingCategory) {
+      setCategoryName(editingCategory.name);
+    }
+  }, [editingCategory]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (categoryName.trim()) {
-      onAddCategory({
-        id: Date.now(),
-        name: categoryName,
-        services: []
-      });
+      if (editingCategory) {
+        onEditCategory(editingCategory.id, categoryName); // Update category
+      } else {
+        onAddCategory({
+          name: categoryName,
+        });
+      }
       setCategoryName('');
     }
   };
@@ -32,7 +41,7 @@ const CategoryForm = ({ onAddCategory }) => {
                 rounded-lg shadow-lg hover:scale-105 hover:from-purple-500 hover:to-blue-500 transition duration-300 ease-in-out"
         >
           <IoAdd className="text-xl" />
-          Add Category
+          {editingCategory ? 'Edit Category' : 'Add Category'}
         </button>
       </div>
     </form>
