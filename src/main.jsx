@@ -9,6 +9,7 @@ import './index.css'
 import App from './App.jsx'
 import rootReducer from './Reducer/index.js';
 
+
 export const store = configureStore({
   reducer:rootReducer,
 });

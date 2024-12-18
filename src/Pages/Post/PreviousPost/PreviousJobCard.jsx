@@ -1,9 +1,25 @@
 import React from 'react';
 import { FaEdit, FaTrash, FaMapMarkerAlt, FaDollarSign, FaClock } from 'react-icons/fa';
 import SkillBadge from '../../../Component/Common/SkillBadge';
+import { useSelector } from 'react-redux';
 
+const PreviousJobCard = ({ job, onEdit, onDelete }) => {
+  const { user } = useSelector((state) => state.auth);
 
-const PreviousJobCard= ({ job, onEdit, onDelete }) => {
+  // Function to format the date (only date, no time)
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString(); // This will format it to "MM/DD/YYYY"
+  };
+
+  // Function to remove HTML tags and limit description to 50 characters
+  const formatDescription = (description) => {
+    // Remove HTML tags using regex
+    const cleanedDescription = description.replace(/<[^>]*>/g, '');
+    // Limit the description to 50 characters
+    return cleanedDescription.length > 50 ? cleanedDescription.slice(0, 50) + '...' : cleanedDescription;
+  };
+
   return (
     <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
       <div className="p-6">
@@ -11,8 +27,8 @@ const PreviousJobCard= ({ job, onEdit, onDelete }) => {
           {/* Company Logo */}
           <div className="flex-shrink-0">
             <img
-              src={job.companyLogo}
-              alt={`${job.company} logo`}
+              src={user.avatar}
+              alt={`${user.avatar} logo`}
               className="w-16 h-16 rounded-lg object-cover"
             />
           </div>
@@ -56,12 +72,12 @@ const PreviousJobCard= ({ job, onEdit, onDelete }) => {
               </div>
               <div className="flex items-center text-gray-600">
                 <FaClock className="mr-2 text-gray-400" />
-                <span>{job.type}</span>
+                <span>{job.jobType}</span>
               </div>
             </div>
 
             {/* Description */}
-            <p className="mt-4 text-gray-600">{job.description}</p>
+            <p className="mt-4 text-gray-600">{formatDescription(job.description)}</p>
 
             {/* Skills */}
             <div className="mt-4 flex flex-wrap gap-2">
@@ -72,7 +88,7 @@ const PreviousJobCard= ({ job, onEdit, onDelete }) => {
 
             {/* Posted Date */}
             <div className="mt-4 text-sm text-gray-500">
-              Posted on: {new Date(job.postedDate).toLocaleDateString()}
+              Posted on: {formatDate(job.updatedAt || job.createdAt)}
             </div>
           </div>
         </div>
