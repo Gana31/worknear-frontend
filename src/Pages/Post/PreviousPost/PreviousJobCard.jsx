@@ -61,7 +61,7 @@ const PreviousJobCard = ({ job, onEdit, onDelete }) => {
             </div>
 
             {/* Job Details */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
               <div className="flex items-center text-gray-600">
                 <FaMapMarkerAlt className="mr-2 text-gray-400" />
                 <span>{job.location}</span>

@@ -49,7 +49,7 @@ function PreviousMainPage() {
       // Remove the job from the local state
       setJobs(jobs.filter((job) => job.id !== id));
 
-      toast.success("Job deleted successfully!");
+      toast.success("Job Post deleted successfully!");
     } catch (error) {
       toast.error("Failed to delete the job. Please try again.");
       console.error(error);

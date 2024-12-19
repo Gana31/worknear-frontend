@@ -3,16 +3,20 @@ import { FaBriefcase, FaCode, FaFileImage, FaClock, FaGlobe, FaTag, FaBuilding }
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useDispatch, useSelector, } from "react-redux";
-import { createPost } from "../../Services/Operations/postoperation";
+import { createPost, updatePost } from "../../Services/Operations/postoperation";
 import { useLocation, useNavigate } from "react-router-dom";
+import apiClient from "../../Services/ApiConnector";
+import { setLoading } from "../../Slices/authSlice";
+import LoadingSpinner from "../../Component/Common/Spinner";
 function JobPostForm() {
     const coverPhoto =
         "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80";
-    const { user } = useSelector((state) => state.auth);
+    const { user ,loading} = useSelector((state) => state.auth);
     const [mode, setMode] = useState("traditional"); // 'traditional' or 'visual'
     const location = useLocation();
-    const usedispatch = useDispatch();
+    const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [categories, setCategories] = useState([]);
     const [imageUrl, setImageUrl] = useState("")
     const [formData, setFormData] = useState({
         name: user.name || "",
@@ -34,6 +38,19 @@ function JobPostForm() {
 
 
     useEffect(() => {
+
+        async function fetchCategories() {
+            setLoading(true)
+            try {
+                const response = await apiClient.get("getAllCategories");
+                const data = response.data.data
+                setCategories(data || []);
+                setLoading(false)
+            } catch (error) {
+                console.error("Error fetching categories:", error);
+            }
+        }
+        fetchCategories();
         // Check if we are in edit mode and prefill the form data if available
         if (location.state && location.state.job) {
             const job = location.state.job;
@@ -59,21 +76,30 @@ function JobPostForm() {
             setMode(job.mode || "traditional");
         }
     }, [location.state, user]);
+   
+   
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-
-        // Update form data
-        setFormData((prev) => ({
-            ...prev,
-            [name]: name === "mobile" ? value.slice(0, 10) : value, // Limit mobile to 10 digits
-        }));
-
+    
+        if (name === "categoryId") {
+            const selectedCategory = categories.find(cat => cat.id === value);
+            if (selectedCategory) {
+                setFormData((prev) => ({
+                    ...prev,
+                    category: selectedCategory.name, // Store the category name here
+                }));
+            }
+        } else {
+            setFormData((prev) => ({ ...prev, [name]: value }));
+        }
+    
         // Validate inputs as the user types
         setErrors((prev) => ({
             ...prev,
             [name]: validateField(name, value),
         }));
     };
+    
 
 
     const handleModeToggle = (newMode) => {
@@ -127,6 +153,8 @@ function JobPostForm() {
                     return value.trim() === "" ? "Salary is required." : "";
                 case "description":
                     return value.trim() === "" ? "Description is required." : "";
+                case "categoryId":
+                    return value.trim() === "" ? "Category is required." : "";    
                 default:
                     return "";
             }
@@ -141,27 +169,37 @@ function JobPostForm() {
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
+
     const handleSubmit = (e) => {
         e.preventDefault();
+    
         if (validateForm()) {
             const form = new FormData();
-            // Append form data to FormData object
+    
+            // Append all form fields to FormData
             Object.keys(formData).forEach((key) => {
                 form.append(key, formData[key]);
             });
-
-            // Append the image file if it exists
+    
+            // Handle image file
             if (imageFile) {
                 form.append("images", imageFile);
+            } else if (imageUrl && location.state) {
+                form.append("existingImage", imageUrl);
             }
-
-            // Dispatch action to create post
-            usedispatch(createPost(form, navigate)); // Sending FormData to the backend
-            console.log("Form Data Submitted:", formData);
+    
+            if (location.state) {
+                // Update job post
+                dispatch(updatePost(location.state.job.id, form,navigate)); // Pass job ID for update
+            } else {
+                // Create job post
+                dispatch(createPost(form, navigate));
+            }
         } else {
             console.log("Validation Errors:", errors);
         }
     };
+    
 
     return (
         <div className="min-h-screen bg-gray-50">
@@ -265,13 +303,33 @@ function JobPostForm() {
                                     </p>
                                 )}
                             </div>
-
+                            <div className="mb-4">
+                            <label className="block text-sm font-semibold mb-2">Category</label>
+                            <select
+                                name="categoryId"
+                                value={categories.find(cat => cat.name === formData.category)?.id || ""} // This ensures the selected category is set correctly
+        
+                                onChange={handleInputChange}
+                                className="w-full p-2 border rounded-lg"
+                            >
+                                <option value="">Select a category</option>
+                                {loading ?(<LoadingSpinner/>) : (
+                                    categories.map((category) => (
+                                        <option key={category.id} value={category.id}>
+                                            {category.name}
+                                        </option>
+                                    ))
+                                )}
+                            </select>
+                            {errors.categoryId && (
+                                <p className="text-red-500 text-sm mt-1">{errors.categoryId}</p>
+                            )}
+                        </div>
                             <div className="mb-4">
                                 <label className="block text-sm font-semibold mb-2">City</label>
                                 <input
                                     type="text"
                                     name="city"
-                                    maxLength={"10"}
                                     value={formData.city}
                                     onChange={handleInputChange}
                                     placeholder="e.g., Mumbai"

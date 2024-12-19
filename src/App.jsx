@@ -14,6 +14,7 @@ import JobMain from "./Pages/Job/JobMain";
 import JobPostForm from "./Pages/Post/CreatePost";
 import PreviousMainPage from "./Pages/Post/PreviousPost/PreviousMainPage";
 import CompanyProfilePage from "./Pages/Profile/CompanyProfile";
+import PostDetailsMain from "./Pages/Post/DetailPost/PostDetailsMain";
 
 
 
@@ -44,7 +45,8 @@ function App() {
         <Route path="*" element={<NotFound />} />
         <Route path="/old-post" element={<PreviousMainPage/>} />
         <Route path="/cprofile" element={<CompanyProfilePage/>} />
-        
+        <Route path="/post-detail" element={<PostDetailsMain/>} />
+       
         Protected Routes
         {/* <Route 
           path="/userorders" 
