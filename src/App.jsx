@@ -15,6 +15,8 @@ import JobPostForm from "./Pages/Post/CreatePost";
 import PreviousMainPage from "./Pages/Post/PreviousPost/PreviousMainPage";
 import CompanyProfilePage from "./Pages/Profile/CompanyProfile";
 import PostDetailsMain from "./Pages/Post/DetailPost/PostDetailsMain";
+import JobAppliedList from "./Pages/JobAppliedList/JobAppliedList";
+import Hire from "./Pages/OpenToWorkProfile/Hire";
 
 
 
@@ -41,11 +43,13 @@ function App() {
         {/* <Route path="/cart" element={<Cart />} /> */}
         <Route path="/about" element={<AboutPage />} />
         <Route path="/job" element={<JobMain/>} />
+        <Route path="/hire" element={<Hire/>} />
         <Route path="/create-post" element={<JobPostForm/>} />
         <Route path="*" element={<NotFound />} />
         <Route path="/old-post" element={<PreviousMainPage/>} />
         <Route path="/cprofile" element={<CompanyProfilePage/>} />
         <Route path="/post-detail" element={<PostDetailsMain/>} />
+        <Route path="/applied-user" element={<JobAppliedList/>} />
        
         Protected Routes
         {/* <Route 

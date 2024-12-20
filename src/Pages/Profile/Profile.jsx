@@ -1,52 +1,42 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaEdit, FaMapMarkerAlt, FaLink, FaUsers, FaBriefcase, FaClock, FaCertificate, FaCode, FaSave, FaTimes, FaGithub, 
   FaLinkedin, FaTwitter, FaCalendarAlt, FaTrash, FaPlus, FaTag, FaCheck,FaCity } from "react-icons/fa";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import EditableField from "./EditableInput";
 import SocialLink from "./SocialInput";
+import { toast } from "react-toastify";
+import apiClient from "../../Services/ApiConnector";
+import { setLoading, updateUser } from "../../Slices/authSlice";
 
 function ProfilePage() {
   const { user } = useSelector((state) => state.auth);
   const [isEditing, setIsEditing] = useState(false);
+  const dispatch = useDispatch();
   const [profileData, setProfileData] = useState({
-    name: user?.name || "Sarah Anderson",
-    role: "Senior Frontend Developer",
-    bio: "Passionate about creating beautiful and intuitive user interfaces. Specialized in React ecosystem and modern web technologies.",
+    name: user?.name || "",
+    role: user?.role || "Senior Frontend Developer",
+    bio: user?.bio || "",
     avatar: user?.avatar || "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
     coverPhoto: "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
-    location: "San Francisco, CA",
-    website: "www.sarahanderson.dev",
-    joinDate: "January 2024",
-    city:"aurangabad",
-    categories: ["React", "JavaScript"], 
-    services: "Frontend Development, UI/UX Design, Performance Optimization",
-    availability: "Open to opportunities",
-    experience: "8+ years",
-    certifications: "AWS Certified Developer, Google Cloud Professional",
-    education: [
-      { college: "Harvard University", marks: "3.8 GPA", branch: "Computer Science", passedYear: "2023" },
-      { college: "MIT", marks: "4.0 GPA", branch: "Software Engineering", passedYear: "2020" },
+    location: user?.location || "",
+    website: user?.website || "",
+    joinDate: user?.joinDate || "January 2024",
+    city: user?.city || "",
+    category: user?.category || [],
+    services: user?.services || "",
+    availability: user?.availability || "Open to opportunities",
+    experience: user?.experience || "8+ years",
+    education: user?.education || [
+      { college: "", marks: "", branch: "", passedYear: "" },
     ],
     social: {
-      github: "github.com/sarahanderson",
-      linkedin: "linkedin.com/in/sarahanderson",
-      twitter: "@sarahanderson",
+      github: user?.social?.github || "",
+      linkedin: user?.social?.linkedin || "",
+      twitter: user?.social?.twitter || "",
     },
   });
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const allCategories = [
-    "React",
-    "JavaScript",
-    "Node.js",
-    "Python",
-    "Django",
-    "Flutter",
-    "UI/UX Design",
-    "Next.js",
-    "SQL",
-    "MongoDB",
-    "AWS",
-  ];
+  const [allCategories ,SetallCategories ] = useState([])
   const img_urls = [
     "https://res.cloudinary.com/dnyhn7loo/image/upload/v1732534321/profile_images/g1xzno2gegyixplrqky2.webp",
     "https://res.cloudinary.com/dnyhn7loo/image/upload/v1732534320/profile_images/xyrs8o9vgo8qjhz1dlaw.webp",
@@ -62,17 +52,17 @@ function ProfilePage() {
       [name]: value,
     }));
   };
-  const toggleCategory = (category) => {
+  const toggleCategory = (categoryName) => {
     setProfileData((prev) => {
-      const isSelected = prev.categories.includes(category);
+      const isSelected = prev.category.includes(categoryName);
       return {
         ...prev,
-        categories: isSelected
-          ? prev.categories.filter((c) => c !== category) // Deselect
-          : [...prev.categories, category], // Select
+        category: isSelected
+          ? prev.category.filter((c) => c !== categoryName) // Deselect
+          : [...prev.category, categoryName], // Select
       };
     });
-  };
+  }
 
   const handleSocialChange = (e) => {
     const { name, value } = e.target;
@@ -85,8 +75,11 @@ function ProfilePage() {
     }));
   };
   const handleSave = () => {
-    // Prepare the data to be saved
-    const profileDataToSave = { ...profileData };
+    const profileDataToSave = { 
+      ...profileData, 
+      // Retain category names as they are
+      category: [...profileData.category],
+    };
   
     // Filter out null or empty values
     for (const key in profileDataToSave) {
@@ -95,22 +88,25 @@ function ProfilePage() {
       }
     }
   
-    // Make the API call to save the data
     saveProfileDataToAPI(profileDataToSave);
-    setIsEditing(false); // Exit editing mode after saving
+    setIsEditing(false);
   };
   
+  
   const saveProfileDataToAPI = async (data) => {
+    
     try {
-      const response = await apiClient.put("/update-profile", data);
+      const response = await apiClient.post("/createprofile", data);
+      // console.log(response.data.data)
       if (response.data.success) {
         toast.success("Profile updated successfully");
-        dispatch(updateUser(response.data.user)); // Update Redux store
+        dispatch(updateUser(response.data.data)); // Update Redux store
       } else {
         toast.error("Failed to update profile");
       }
     } catch (error) {
-      toast.error("Error updating profile");
+      console.log(error)
+      toast.error(error.response.data.message || "Error updating profile");
     }
   };
   
@@ -148,7 +144,6 @@ function ProfilePage() {
     { label: "Location", name: "location", icon: FaMapMarkerAlt },
     { label: "Website", name: "website", icon: FaLink },
     { label: "Experience", name: "experience", icon: FaBriefcase },
-    { label: "Certifications", name: "certifications", icon: FaCertificate },
     { label: "Services", name: "services", icon: FaBriefcase },
     { label: "City", name: "city", icon: FaCity },
     
@@ -167,6 +162,22 @@ function ProfilePage() {
     }));
     setIsDropdownOpen(false); // Close dropdown after selecting image
   };
+
+  useEffect(()=>{
+    async function fetchCategories() {
+      setLoading(true)
+      try {
+          const response = await apiClient.get("getAllCategories");
+
+          const data = response.data.data
+          SetallCategories(data || []);
+          setLoading(false)
+      } catch (error) {
+          console.error("Error fetching categories:", error);
+      }
+  }
+  fetchCategories();
+  },[])
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -292,50 +303,49 @@ function ProfilePage() {
             </div>
           </div>
 
-            {/* Categories Section */}
-            <div className="mt-6">
-            <h3 className="text-lg font-semibold flex items-center gap-2">
-              <FaTag className="text-gray-500" /><span className="text-gray-500"> Categories</span>
-            </h3>
-            {isEditing ? (
-              <div className="relative mt-2">
-                <button
-                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className="px-3 py-2 border rounded-md w-full text-left"
-                >
-                  Select Categories
-                </button>
-                {isDropdownOpen && (
-                  <div className="absolute z-10 mt-2 bg-white border rounded-md shadow-lg w-full">
-                    {allCategories.map((category) => (
-                      <div
-                        key={category}
-                        className="p-2 hover:bg-gray-100 cursor-pointer flex justify-between"
-                        onClick={() => toggleCategory(category)}
-                      >
-                        <span>{category}</span>
-                        {profileData.categories.includes(category) && (
-                          <FaCheck className="text-green-500" />
-                        )}
-                      </div>
-                    ))}
-                  </div>
+          <div className="mt-6">
+    <h3 className="text-lg font-semibold flex items-center gap-2">
+      <FaTag className="text-gray-500" />
+      <span className="text-gray-500"> Categories</span>
+    </h3>
+    {isEditing ? (
+      <div className="relative mt-2">
+        <button
+          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+          className="px-3 py-2 border rounded-md w-full text-left"
+        >
+          Select Categories
+        </button>
+        {isDropdownOpen && (
+          <div className="absolute z-10 mt-2 bg-white border rounded-md shadow-lg w-full">
+            {allCategories.map((category) => (
+              <div
+                key={category.id}
+                className="p-2 hover:bg-gray-100 cursor-pointer flex justify-between"
+                onClick={() => toggleCategory(category.name)}
+              >
+                <span>{category.name}</span>
+                {profileData.category.includes(category.name) && (
+                  <FaCheck className="text-green-500" />
                 )}
               </div>
-            ) : (
-              <div className="flex flex-wrap gap-2 mt-2">
-                {profileData.categories.map((category) => (
-                  <span
-                    key={category}
-                    className="px-3 py-1 bg-blue-100 text-blue-700 rounded-md text-sm flex items-center gap-1"
-                  >
-                    {category}
-                  </span>
-                ))}
-              </div>
-            )}
+            ))}
           </div>
-   
+        )}
+      </div>
+    ) : (
+      <div className="flex flex-wrap gap-2 mt-2">
+        {profileData.category.map((categoryName,index) => (
+          <span
+            key={index}
+            className="px-3 py-1 bg-blue-100 text-blue-700 rounded-md text-sm flex items-center gap-1"
+          >
+            {categoryName}
+          </span>
+        ))}
+      </div>
+    )}
+  </div>
           {/* Education Section */}
           <div className="mt-6  rounded-lg p-4">
             <h3 className="text-lg font-semibold mb-4">Education</h3>

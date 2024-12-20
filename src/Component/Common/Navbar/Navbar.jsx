@@ -36,6 +36,7 @@ const Navbar = () => {
     { name: "Job", path: "/job" },
     { name: "About", path: "/about" },
     { name: "Contact", path: "/contact" },
+    { name: "Hire Professional", path: "/hire" },
   ];
 
   const profileMenuItems = [

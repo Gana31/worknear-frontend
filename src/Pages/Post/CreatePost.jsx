@@ -61,13 +61,14 @@ function JobPostForm() {
                 description: job.description || "",
                 jobType: job.jobType || "Full-Time",
                 jobMode: job.jobMode || "Onsite",
-                skills: job.skills || "",
+                skills: Array.isArray(job.skills) ? job.skills.join(", ") : job.skills || "",
                 location: job.location || "",
                 city: job.city || "",
                 mobile: job.mobile || "",
                 mode: job.mode || "traditional",
                 salary: job.salary || "",
                 postMode: job.postMode || "Draft",
+                category: job.category || "", // Store the selected category's name
             });
             if(job.mode == "visual"){
                 setImageUrl(job.image);
@@ -263,7 +264,7 @@ function JobPostForm() {
                                     className="w-full p-2 border rounded-lg"
                                 >
                                     <option value="Onsite">Draft</option>
-                                    <option value="Remote">Public</option>
+                                    <option value="Public">Public</option>
                                 </select>
                                 {errors.postMode && (
                                     <p className="text-red-500 text-sm mt-1">
@@ -307,7 +308,7 @@ function JobPostForm() {
                             <label className="block text-sm font-semibold mb-2">Category</label>
                             <select
                                 name="categoryId"
-                                value={categories.find(cat => cat.name === formData.category)?.id || ""} // This ensures the selected category is set correctly
+                                value={categories.find(cat => cat.name === formData.category)?.id ||  ""} // This ensures the selected category is set correctly
         
                                 onChange={handleInputChange}
                                 className="w-full p-2 border rounded-lg"

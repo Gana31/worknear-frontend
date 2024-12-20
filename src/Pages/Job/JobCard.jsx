@@ -8,7 +8,8 @@ import { useNavigate } from 'react-router-dom';
   const {user} = useSelector((state)=> state.auth)
  const navigate = useNavigate()
 
-  const handlerDetails = () =>{
+  const handlerDetails = (e) =>{
+    e.stopPropagation();
     navigate("/post-detail",{ state: { job } })
   }
   const formatDate = (dateString) => {
@@ -21,7 +22,7 @@ import { useNavigate } from 'react-router-dom';
     // Remove HTML tags using regex
     const cleanedDescription = description.replace(/<[^>]*>/g, '');
     // Limit the description to 50 characters
-    return cleanedDescription.length > 50 ? cleanedDescription.slice(0, 50) + '...' : cleanedDescription;
+    return cleanedDescription.length > 50 ? cleanedDescription.slice(0, 200) + '...' : cleanedDescription;
   };
 
 
@@ -52,7 +53,6 @@ import { useNavigate } from 'react-router-dom';
           <div className="flex justify-between items-center mb-4">
             <span className="text-gray-500">{formatDate (job.createdAt)}</span>
           </div>
-          <ApplyButton jobId={job.id} />
         </div>
       </div>
     </div>
@@ -80,7 +80,7 @@ import { useNavigate } from 'react-router-dom';
               <span className="text-gray-500">•</span>
               <span className="text-gray-500">{formatDate (job.createdAt)}</span>
             </div>
-            <ApplyButton jobId={job.id} />
+            <ApplyButton job={job} />
           </div>
         </div>
       </div>

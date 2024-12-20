@@ -94,6 +94,7 @@ function PreviousMainPage() {
                   job={job}
                   onEdit={handleEdit}
                   onDelete={handleDelete}
+                  
                 />
               ) : (
                 <VisualJobCard
