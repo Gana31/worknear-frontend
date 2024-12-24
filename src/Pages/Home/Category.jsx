@@ -1,5 +1,6 @@
 import React from "react";
-import { FaCode, FaPalette, FaChartLine, FaDatabase, FaMobile, FaCloud } from "react-icons/fa";
+
+import { FaBroom, FaCouch, FaHammer, FaLightbulb, FaTruck, FaWrench } from "react-icons/fa6";
 
 const CategoryCard = ({ icon: Icon, title, count }) => (
   <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 text-center group hover:scale-105">
@@ -12,16 +13,17 @@ const CategoryCard = ({ icon: Icon, title, count }) => (
   </div>
 );
 
+
 const Categories = () => {
   const categories = [
-    { icon: FaCode, title: "Development", count: "1,200+" },
-    { icon: FaPalette, title: "Design", count: "800+" },
-    { icon: FaChartLine, title: "Marketing", count: "600+" },
-    { icon: FaDatabase, title: "Data Science", count: "400+" },
-    { icon: FaMobile, title: "Mobile", count: "300+" },
-    { icon: FaCloud, title: "Cloud Computing", count: "500+" },
+    { icon: FaWrench, title: "Plumbing", count: "1,500+" },
+    { icon: FaHammer, title: "Carpentry", count: "1,200+" },
+    { icon: FaCouch, title: "Furniture Assembly", count: "900+" },
+    { icon: FaBroom, title: "Cleaning Services", count: "2,000+" },
+    { icon: FaTruck, title: "Moving & Delivery", count: "800+" },
+    { icon: FaLightbulb, title: "Electrical Work", count: "1,100+" },
   ];
-
+  
   return (
     <section className="py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -7,6 +7,7 @@ import SocialLink from "./SocialInput";
 import { toast } from "react-toastify";
 import apiClient from "../../Services/ApiConnector";
 import { setLoading, updateUser } from "../../Slices/authSlice";
+import { FaPhone } from "react-icons/fa6";
 
 function ProfilePage() {
   const { user } = useSelector((state) => state.auth);
@@ -14,7 +15,7 @@ function ProfilePage() {
   const dispatch = useDispatch();
   const [profileData, setProfileData] = useState({
     name: user?.name || "",
-    role: user?.role || "Senior Frontend Developer",
+    role: user?.role || "",
     bio: user?.bio || "",
     avatar: user?.avatar || "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
     coverPhoto: "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
@@ -22,10 +23,11 @@ function ProfilePage() {
     website: user?.website || "",
     joinDate: user?.joinDate || "January 2024",
     city: user?.city || "",
+    phone:user?.phone || "",
     category: user?.category || [],
     services: user?.services || "",
     availability: user?.availability || "Open to opportunities",
-    experience: user?.experience || "8+ years",
+    experience: user?.experience || "",
     education: user?.education || [
       { college: "", marks: "", branch: "", passedYear: "" },
     ],
@@ -230,11 +232,23 @@ function ProfilePage() {
                       onChange={handleInputChange}
                       className="text-gray-600 w-full border rounded-md p-2"
                     />
+                     <input
+                      type="tel"
+                      name="phone"
+                      maxLength={"10"}
+                      value={profileData.phone}
+                      placeholder="Enter Your phone"
+                      pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
+                      onChange={handleInputChange}
+                      className="text-gray-600 w-full border rounded-md p-2"
+                    />
                   </div>
+
                 ) : (
                   <>
                     <h1 className="text-2xl font-bold">{profileData.name}</h1>
                     <p className="text-gray-600">{profileData.role}</p>
+                    <p className="text-gray-600">{profileData.phone}</p>
                   </>
                 )}
               </div>

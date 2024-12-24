@@ -4,6 +4,7 @@ import apiClient from '../../Services/ApiConnector';
 import { toast } from 'react-toastify';
 import LoadingSpinner from '../../Component/Common/Spinner';
 import SkillBadge from '../../Component/Common/SkillBadge';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function Hire() {
@@ -14,7 +15,7 @@ export default function Hire() {
   const [loading, setLoading] = useState(false);
   const [locations, setLocations] = useState([]);
   const [categories, setCategories] = useState([]);
-
+const navigate = useNavigate();
   // Function to filter profiles based on selected category and location
   const filterProfiles = async () => {
     setLoading(true);
@@ -23,7 +24,11 @@ export default function Hire() {
     try {
       const response = await apiClient.get('/getallprofile'); // Replace with your correct API endpoint
       const fetchedProfiles = response.data.data;
+      // console.log(fetchedProfiles) 
+     if(fetchedProfiles.length > 0){
       setProfiles(fetchedProfiles); // Set profiles data
+     }
+     setProfiles([]);
 
       // Extract unique locations
       const uniqueLocations = Array.from(new Set(fetchedProfiles.map((profile) => profile.city)));
@@ -77,6 +82,10 @@ export default function Hire() {
     filterProfiles(); // Re-filter profiles whenever the selected filters change
   }, [selectedLocation, selectedCategory]);
 
+  const getinfohandler = async(id) =>{
+    
+    navigate("/cprofile", { state: { jobid: id } });
+  }
   return (
     <div className="w-full flex justify-center items-center py-8">
       <div className="w-full max-w-screen-xl px-4">
@@ -124,14 +133,17 @@ export default function Hire() {
               filteredProfiles.map((profile) => (
                 <div
                   key={profile.id}
-                  className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-500 transform hover:scale-105 p-6 flex flex-col items-center border border-gray-300"
+                  className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-500 transform hover:scale-105 p-6 flex flex-col border border-gray-300"
+                onClick={()=>getinfohandler(profile.id)}
                 >
+                  <div className='items-center flex flex-col'>
                   <img
                     src={profile.avatar}
                     alt={profile.name}
-                    className="w-32 h-32 rounded-full object-cover mb-4 border-4 border-white shadow-lg"
+                    className="w-32 h-32 rounded-xl object-cover mb-4 border-4 border-white shadow-lg"
                   />
-                  <h2 className="text-2xl font-semibold text-gray-800 mb-2">{profile.name}</h2>
+                  <h2 className="text-2xl font-semibold text-gray-800 mb-2 text-justify">{profile.name}</h2>
+                  </div>
                   <p className="text-left text-gray-600 mt-2">{profile.bio}</p>
                   
                   {/* Render skills as SkillBadge */}
@@ -141,11 +153,17 @@ export default function Hire() {
                     ))}
                   </div>
 
-                  <div className="mt-4 space-y-4">
+                  <div className="mt-4 space-y-3">
                     <div className="flex w-full items-start gap-2">
                       <FaEnvelope className="text-lg text-gray-600" />
                       <span className="text-gray-700">{profile.email}</span>
                     </div>
+                   {
+                    profile.phone &&  <div className="flex w-full items-start gap-2">
+                    <FaPhone className="text-lg text-gray-600" />
+                    <span className="text-gray-700">{profile.phone}</span>
+                  </div>
+                   }
 
                     <div className="flex items-center gap-2">
                       <FaBriefcase className="text-lg text-gray-600" />

@@ -26,7 +26,7 @@ export function ApplicationCards({ applications, onStatusChange }) {
           <div className="flex gap-2">
             {application.status !== 'accept' && (
               <button
-                onClick={() => onStatusChange(application.id, 'accept')}
+                onClick={() => onStatusChange(application.id, 'accept',application.email)}
                 className="flex-1 bg-green-50 text-green-600 py-2 px-4 rounded-md text-sm font-medium flex items-center justify-center gap-1"
               >
                 <FaCheckCircle className="w-4 h-4" />
@@ -35,7 +35,7 @@ export function ApplicationCards({ applications, onStatusChange }) {
             )}
             {application.status !== 'reject' && (
               <button
-                onClick={() => onStatusChange(application.id, 'reject')}
+                onClick={() => onStatusChange(application.id, 'reject',application.email)}
                 className="flex-1 bg-red-50 text-red-600 py-2 px-4 rounded-md text-sm font-medium flex items-center justify-center gap-1"
               >
                 <FiXCircle className="w-4 h-4" />

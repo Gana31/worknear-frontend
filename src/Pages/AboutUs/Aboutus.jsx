@@ -1,6 +1,6 @@
 import React from 'react';
 import { FaChevronDown, FaBullseye, FaHandHoldingHeart, FaLightbulb, FaUsers, FaHandshake, FaTools, FaLinkedin, FaTwitter } from 'react-icons/fa';
-
+import backgroundimg from '../../assets/background.png'
 const AboutPage = () => {
   const values = [
     {
@@ -65,7 +65,7 @@ const AboutPage = () => {
       <div className="relative h-[500px]  bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg shadow-lg hover:scale-105 hover:from-purple-500 hover:to-blue-500 transition duration-300 ease-in-out ">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1920&q=80"
+            src={backgroundimg}
             alt="Team collaboration"
             className="w-full h-full object-cover opacity-20"
           />

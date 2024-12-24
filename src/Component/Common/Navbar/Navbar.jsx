@@ -46,12 +46,7 @@ const Navbar = () => {
         setIsProfileMenuOpen(!isProfileMenuOpen)
         navigate("/profile");
     } },
-    { icon: FaCog, label: "Settings", 
-      action: () => {
-        setIsMenuOpen(false)
-        setIsProfileMenuOpen(!isProfileMenuOpen)
-        console.log("Settings clicked")
-      } },
+  
       { icon: TbCategoryPlus, label: "Add Category", 
         action: () => {
           setIsMenuOpen(false)
@@ -94,17 +89,11 @@ const Navbar = () => {
               </Link>
             ))}
           </div>
-          <div className="md:hidden flex items-center space-x-2">
-          <button className="text-gray-600 hover:text-gray-800">
-              <FaBell className="h-5 w-5" />
-            </button>
-          </div>
+      
 
           {/* Notification & Profile Menu */}
           <div className="hidden md:flex items-center space-x-8">
-            <button className="text-gray-600 hover:text-gray-800">
-              <FaBell className="h-5 w-5" />
-            </button>
+         
             {!isLoggedIn ? (
               <button
                 onClick={handleLoginRedirect}

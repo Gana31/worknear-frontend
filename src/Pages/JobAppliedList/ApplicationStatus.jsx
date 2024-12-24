@@ -47,7 +47,7 @@ export function ApplicationTable({ applications, onStatusChange }) {
                 <div className="flex gap-2">
                   {application.status !== 'accept' && (
                     <button
-                      onClick={() => onStatusChange(application.id, 'accept')}
+                      onClick={() => onStatusChange(application.id, 'accept',application.email)}
                       className="text-green-600 hover:text-green-900 flex items-center gap-1"
                     >
                       <FaCheckCircle className="w-4 h-4" />
@@ -56,7 +56,7 @@ export function ApplicationTable({ applications, onStatusChange }) {
                   )}
                   {application.status !== 'reject' && (
                     <button
-                      onClick={() => onStatusChange(application.id, 'reject')}
+                      onClick={() => onStatusChange(application.id, 'reject',application.email)}
                       className="text-red-600 hover:text-red-900 flex items-center gap-1"
                     >
                       <FiXCircle className="w-4 h-4" />

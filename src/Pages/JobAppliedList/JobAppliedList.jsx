@@ -8,16 +8,16 @@ import apiClient from '../../Services/ApiConnector';
 import { setLoading } from '../../Slices/authSlice';
 import { toast } from 'react-toastify';
 import { useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 function JobAppliedList() {
     const location = useLocation();
     const [applications, setApplications] = useState([]);
     const [currentStatus, setCurrentStatus] = useState('pending');
-    const { jobid } = location.state || {};
-
-    const handleStatusChange = async (id, status) => {
+    const { jobid ,job} = location.state || {};
+    const handleStatusChange = async (id, status,email) => {
         try {
-            const response = await apiClient.put(`/applicationstatusChange/${id}`, { status });
+            const response = await apiClient.put(`/applicationstatusChange/${id}`, { status :status , jobTitle : job.title , companyName : job.name,userEmail:email});
             if (response.data.success) {
                 toast.success("Status updated successfully!");
 

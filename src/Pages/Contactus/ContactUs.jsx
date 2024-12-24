@@ -3,7 +3,7 @@ import { FaChevronDown } from 'react-icons/fa';
 import { FiMail, FiUser, FiPhone, FiMessageSquare, FiMapPin, FiClock, FiMessageCircle } from 'react-icons/fi';
 import apiClient from '../../Services/ApiConnector';
 import { toast } from 'react-toastify';
-
+import backgroundimg from '../../assets/background.png'
 const ContactPage = () => {
   const [formData, setFormData] = useState({
     fullname: '',
@@ -89,7 +89,7 @@ const ContactPage = () => {
       <div className="relative h-[500px] bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg shadow-lg transition duration-300 ease-in-out">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1920&q=80"
+            src={backgroundimg}
             alt="Team collaboration"
             className="w-full h-full object-cover opacity-20"
           />

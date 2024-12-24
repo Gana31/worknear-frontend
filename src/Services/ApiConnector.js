@@ -2,6 +2,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { APP_URL } from './constant.js';
 import { store } from '../main.jsx';
+import { setLoginData } from '../Slices/authSlice.js';
 axios.defaults.withCredentials = true;
 
 const apiClient = axios.create({
@@ -25,8 +26,8 @@ apiClient.interceptors.response.use(
                     localStorage.removeItem("accessToken")
                     localStorage.removeItem("user")
                     store.dispatch(setLoginData({ user: null, accessToken: null }));
-                    window.location.href = '/'; 
                     toast.error("Your Session Expired. Please Log In Again");
+                    window.location.href = '/login'; 
                 } catch (logoutError) {
                     console.error("Error during logout API call:", logoutError);
                     toast.error("Logout failed. Please try again.");

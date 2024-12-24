@@ -4,8 +4,6 @@ import categoryReducer from "../Slices/categorySlice"
 const rootReducer  = combineReducers({
     auth: authReducer,
     categories: categoryReducer,
-    // product:productReducer,
-    // cart:cartReducer,
 })
 
 export default rootReducer

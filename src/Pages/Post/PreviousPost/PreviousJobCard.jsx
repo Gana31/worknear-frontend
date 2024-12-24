@@ -22,7 +22,7 @@ const PreviousJobCard = ({ job, onEdit, onDelete }) => {
   // Handler for card click (Navigates to the "applied-user" page)
   const handleCardClick = async () => {
     const jobId = job.id;
-    navigate("/applied-user", { state: { jobid: jobId } });
+    navigate("/applied-user", { state: { jobid: jobId ,job:job} });
    
    
   };

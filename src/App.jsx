@@ -42,28 +42,35 @@ function App() {
         
         {/* <Route path="/cart" element={<Cart />} /> */}
         <Route path="/about" element={<AboutPage />} />
-        <Route path="/job" element={<JobMain/>} />
-        <Route path="/hire" element={<Hire/>} />
-        <Route path="/create-post" element={<JobPostForm/>} />
         <Route path="*" element={<NotFound />} />
-        <Route path="/old-post" element={<PreviousMainPage/>} />
+
+        <Route 
+          path="/create-post" 
+          element={<ProtectedRoute element={<JobPostForm />} />} 
+        />
+        
+        <Route 
+          path="/applied-user" 
+          element={<ProtectedRoute element={<JobAppliedList />} />} 
+        />
+        
+        <Route 
+          path="/old-post" 
+          element={<ProtectedRoute element={<PreviousMainPage />} />} 
+        />
         <Route path="/cprofile" element={<CompanyProfilePage/>} />
         <Route path="/post-detail" element={<PostDetailsMain/>} />
-        <Route path="/applied-user" element={<JobAppliedList/>} />
        
         Protected Routes
-        {/* <Route 
-          path="/userorders" 
-          element={<ProtectedRoute element={<OrderHistory />} />} 
+        <Route 
+          path="/job" 
+          element={<ProtectedRoute element={<JobMain />} />} 
         />
         <Route 
-          path="/add-product"  
-          element={<ProtectedRoute element={<Layout><AddProduct /></Layout>} />} 
+          path="/hire"  
+          element={<ProtectedRoute element={<Hire />} />} 
         />
-        <Route 
-          path="/list-product"  
-          element={<ProtectedRoute element={<Layout><ListProduct /></Layout>} />} 
-        /> */}
+
         <Route path="/profile" element={<ProtectedRoute element={<ProfilePage />}/>} />
         <Route 
           path="/manage-category"  

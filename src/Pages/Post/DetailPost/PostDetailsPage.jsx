@@ -1,6 +1,7 @@
 import React from 'react';
 import { FaBriefcase, FaMapMarkerAlt, FaClock, FaUsers, FaMoneyBillWave, FaBuilding } from 'react-icons/fa';
 import { FcSelfServiceKiosk } from 'react-icons/fc';
+import { ApplyButton } from '../../Job/ApplyButton';
 
 const JobDetails = ({job}) => {
   return (
@@ -26,9 +27,7 @@ const JobDetails = ({job}) => {
             </div>
             <div className="flex flex-col md:flex-row md:gap-x-3 mt-5 gap-y-4">
               <div>
-              <button className="bg-blue-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-blue-700 transition-colors">
-                Apply Now
-              </button>
+               <ApplyButton job={job} />
               </div>
         
             </div>
